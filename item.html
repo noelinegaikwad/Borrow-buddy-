@@ -236,61 +236,51 @@
 
 <main class="details-container">
 
-    <div class="item-photo">
-        📷
-    </div>
+    <div class="item-photo" id="itemPhoto"></div>
 
     <div class="item-info">
 
-        <div class="category">PHOTOGRAPHY</div>
+        <div class="category" id="itemCategory"></div>
 
-        <h1>Camera Tripod</h1>
+        <h1 id="itemName"></h1>
 
-        <div class="rating">
-            ⭐ <strong>4.8</strong> · 12 reviews
-        </div>
+        <div class="rating" id="itemRating"></div>
 
-        <div class="location">
-            📍 Available nearby
-        </div>
+        <div class="location" id="itemLocation"></div>
 
-        <p class="description">
-            A sturdy camera tripod suitable for photography,
-            video recording, events and personal projects.
-            Available to borrow for short-term use.
-        </p>
+        <p class="description" id="itemDescription"></p>
 
         <div class="info-box">
 
             <div class="info-row">
                 <span class="label">Condition</span>
-                <span class="value">Very Good</span>
+                <span class="value" id="itemCondition"></span>
             </div>
 
             <div class="info-row">
                 <span class="label">Availability</span>
-                <span class="value">Available</span>
+                <span class="value" id="itemAvailability"></span>
             </div>
 
             <div class="info-row">
                 <span class="label">Borrowing</span>
-                <span class="value">Free</span>
+                <span class="value" id="itemPrice"></span>
             </div>
 
         </div>
 
         <div class="owner">
 
-            <div class="owner-avatar">A</div>
+            <div class="owner-avatar" id="ownerAvatar"></div>
 
             <div>
-                <strong>Arjun</strong>
-                <p>Item owner · ⭐ 4.9 rating</p>
+                <strong id="ownerName"></strong>
+                <p id="ownerRating"></p>
             </div>
 
         </div>
 
-        <button class="request-btn">
+        <button class="request-btn" onclick="requestBorrow()">
             Request to Borrow
         </button>
 
@@ -304,5 +294,118 @@
     <p>© 2026 BorrowBuddy. All rights reserved.</p>
 </footer>
 
+<script>
+
+    const items = {
+
+        1: {
+            name: "Camera Tripod",
+            category: "PHOTOGRAPHY",
+            photo: "📷",
+            rating: "⭐ 4.8 · 12 reviews",
+            location: "📍 Available nearby",
+            description: "A sturdy camera tripod suitable for photography, video recording, events and personal projects. Available to borrow for short-term use.",
+            condition: "Very Good",
+            availability: "Available",
+            price: "Free",
+            owner: "Arjun",
+            ownerRating: "Item owner · ⭐ 4.9 rating"
+        },
+
+        2: {
+            name: "Scientific Calculator",
+            category: "STUDY",
+            photo: "🧮",
+            rating: "⭐ 4.6 · 8 reviews",
+            location: "📍 Available nearby",
+            description: "A scientific calculator useful for mathematics, statistics, engineering and college examinations.",
+            condition: "Good",
+            availability: "Available",
+            price: "Free",
+            owner: "Priya",
+            ownerRating: "Item owner · ⭐ 4.7 rating"
+        },
+
+        3: {
+            name: "Travel Suitcase",
+            category: "TRAVEL",
+            photo: "🧳",
+            rating: "⭐ 4.9 · 15 reviews",
+            location: "📍 Available nearby",
+            description: "A spacious travel suitcase suitable for short trips, vacations and weekend travel.",
+            condition: "Very Good",
+            availability: "Available",
+            price: "₹100/day",
+            owner: "Rohan",
+            ownerRating: "Item owner · ⭐ 4.9 rating"
+        },
+
+        4: {
+            name: "Java Programming Book",
+            category: "BOOKS",
+            photo: "📚",
+            rating: "⭐ 4.7 · 10 reviews",
+            location: "📍 Available nearby",
+            description: "A useful Java programming book for students learning object-oriented programming and Java fundamentals.",
+            condition: "Good",
+            availability: "Available",
+            price: "Free",
+            owner: "Neha",
+            ownerRating: "Item owner · ⭐ 4.8 rating"
+        },
+
+        5: {
+            name: "Electric Drill",
+            category: "TOOLS",
+            photo: "🔧",
+            rating: "⭐ 4.5 · 6 reviews",
+            location: "📍 Available nearby",
+            description: "An electric drill suitable for basic household repairs, furniture work and small DIY projects.",
+            condition: "Good",
+            availability: "Available",
+            price: "₹50/day",
+            owner: "Amit",
+            ownerRating: "Item owner · ⭐ 4.6 rating"
+        },
+
+        6: {
+            name: "Football",
+            category: "SPORTS",
+            photo: "⚽",
+            rating: "⭐ 4.8 · 9 reviews",
+            location: "📍 Available nearby",
+            description: "A football suitable for casual games, practice sessions and outdoor activities.",
+            condition: "Very Good",
+            availability: "Available",
+            price: "Free",
+            owner: "Rahul",
+            ownerRating: "Item owner · ⭐ 4.8 rating"
+        }
+
+    };
+
+    const params = new URLSearchParams(window.location.search);
+    const id = params.get("id") || "1";
+    const item = items[id] || items[1];
+
+    document.getElementById("itemPhoto").textContent = item.photo;
+    document.getElementById("itemCategory").textContent = item.category;
+    document.getElementById("itemName").textContent = item.name;
+    document.getElementById("itemRating").textContent = item.rating;
+    document.getElementById("itemLocation").textContent = item.location;
+    document.getElementById("itemDescription").textContent = item.description;
+    document.getElementById("itemCondition").textContent = item.condition;
+    document.getElementById("itemAvailability").textContent = item.availability;
+    document.getElementById("itemPrice").textContent = item.price;
+    document.getElementById("ownerAvatar").textContent = item.owner.charAt(0);
+    document.getElementById("ownerName").textContent = item.owner;
+    document.getElementById("ownerRating").textContent = item.ownerRating;
+
+    function requestBorrow() {
+        alert("Borrow request feature will be connected to your account soon!");
+    }
+
+</script>
+
 </body>
-              </html>
+</html>
