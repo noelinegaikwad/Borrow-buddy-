@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Browse Items | BorrowBuddy</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f8fafc;
+            color: #172033;
+        }
+
+        header {
+            background: white;
+            border-bottom: 1px solid #e5e7eb;
+            padding: 18px 7%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 25px;
+            font-weight: 800;
+            color: #2563eb;
+            text-decoration: none;
+        }
+
+        nav {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #475569;
+            font-size: 14px;
+        }
+
+        nav a:hover {
+            color: #2563eb;
+        }
+
+        .login {
+            border: 1px solid #2563eb;
+            padding: 9px 16px;
+            border-radius: 8px;
+            color: #2563eb;
+        }
+
+        .signup {
+            background: #2563eb;
+            color: white !important;
+            padding: 10px 16px;
+            border-radius: 8px;
+        }
+
+        .page-header {
+            text-align: center;
+            padding: 55px 7% 35px;
+        }
+
+        .page-header h1 {
+            font-size: 40px;
+            margin-bottom: 12px;
+        }
+
+        .page-header p {
+            color: #64748b;
+        }
+
+        .search-area {
+            max-width: 800px;
+            margin: 0 auto 35px;
+            padding: 0 7%;
+        }
+
+        .search-box {
+            display: flex;
+            background: white;
+            border: 1px solid #dbe2ea;
+            border-radius: 10px;
+            padding: 7px;
+            box-shadow: 0 8px 25px rgba(15, 23, 42, 0.06);
+        }
+
+        .search-box input {
+            flex: 1;
+            border: none;
+            outline: none;
+            padding: 13px;
+            font-size: 15px;
+        }
+
+        .search-box button {
+            border: none;
+            background: #2563eb;
+            color: white;
+            padding: 0 22px;
+            border-radius: 7px;
+            cursor: pointer;
+        }
+
+        .content {
+            display: flex;
+            gap: 30px;
+            padding: 20px 7% 70px;
+            max-width: 1400px;
+            margin: auto;
+        }
+
+        .filters {
+            width: 220px;
+            flex-shrink: 0;
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 22px;
+            height: fit-content;
+        }
+
+        .filters h3 {
+            margin-bottom: 18px;
+        }
+
+        .filter-title {
+            font-size: 14px;
+            font-weight: bold;
+            margin: 20px 0 10px;
+        }
+
+        .filters label {
+            display: block;
+            margin: 10px 0;
+            font-size: 14px;
+            color: #475569;
+        }
+
+        .filters input {
+            margin-right: 8px;
+        }
+
+        .items-section {
+            flex: 1;
+        }
+
+        .items-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .items-top h2 {
+            font-size: 22px;
+        }
+
+        .sort {
+            border: 1px solid #dbe2ea;
+            background: white;
+            padding: 9px;
+            border-radius: 7px;
+        }
+
+        .items {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .item-card {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 14px;
+            overflow: hidden;
+            transition: 0.2s;
+        }
+
+        .item-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 25px rgba(15, 23, 42, 0.08);
+        }
+
+        .item-image {
+            height: 180px;
+            background: #e2e8f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 55px;
+        }
+
+        .item-info {
+            padding: 17px;
+        }
+
+        .category {
+            font-size: 12px;
+            color: #2563eb;
+            font-weight: 600;
+            margin-bottom: 7px;
+        }
+
+        .item-info h3 {
+            font-size: 17px;
+            margin-bottom: 8px;
+        }
+
+        .location {
+            color: #64748b;
+            font-size: 13px;
+            margin-bottom: 12px;
+        }
+
+        .rating {
+            font-size: 13px;
+            margin-bottom: 15px;
+        }
+
+        .bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .price {
+            color: #2563eb;
+            font-weight: 700;
+        }
+
+        .details {
+            color: #2563eb;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        footer {
+            background: #172033;
+            color: white;
+            text-align: center;
+            padding: 40px 7%;
+        }
+
+        footer p {
+            color: #94a3b8;
+            margin-top: 10px;
+            font-size: 14px;
+        }
+
+        @media (max-width: 900px) {
+            .items {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 700px) {
+            nav {
+                display: none;
+            }
+
+            .content {
+                flex-direction: column;
+            }
+
+            .filters {
+                width: 100%;
+            }
+
+            .items {
+                grid-template-columns: 1fr;
+            }
+
+            .page-header h1 {
+                font-size: 32px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <a href="index.html" class="logo">BorrowBuddy</a>
+
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="browse.html">Browse</a>
+        <a href="#how">How It Works</a>
+        <a href="#" class="login">Login</a>
+        <a href="#" class="signup">Sign Up</a>
+    </nav>
+</header>
+
+<section class="page-header">
+    <h1>Browse Items</h1>
+    <p>Find something useful without buying it.</p>
+</section>
+
+<div class="search-area">
+    <div class="search-box">
+        <input type="text" placeholder="Search for books, electronics, tools...">
+        <button>Search</button>
+    </div>
+</div>
+
+<main class="content">
+
+    <aside class="filters">
+
+        <h3>Filters</h3>
+
+        <div class="filter-title">Category</div>
+
+        <label>
+            <input type="checkbox"> Books
+        </label>
+
+        <label>
+            <input type="checkbox"> Electronics
+        </label>
+
+        <label>
+            <input type="checkbox"> Travel
+        </label>
+
+        <label>
+            <input type="checkbox"> Tools
+        </label>
+
+        <label>
+            <input type="checkbox"> Study
+        </label>
+
+        <label>
+            <input type="checkbox"> Photography
+        </label>
+
+        <label>
+            <input type="checkbox"> Sports
+        </label>
+
+        <div class="filter-title">Availability</div>
+
+        <label>
+            <input type="checkbox"> Available now
+        </label>
+
+        <label>
+            <input type="checkbox"> Free items
+        </label>
+
+    </aside>
+
+    <section class="items-section">
+
+        <div class="items-top">
+            <h2>Available Items</h2>
+
+            <select class="sort">
+                <option>Sort: Recommended</option>
+                <option>Newest</option>
+                <option>Highest Rated</option>
+                <option>Price: Low to High</option>
+            </select>
+        </div>
+
+        <div class="items">
+
+            <div class="item-card">
+                <div class="item-image">📷</div>
+
+                <div class="item-info">
+                    <div class="category">Photography</div>
+                    <h3>Camera Tripod</h3>
+                    <div class="location">📍 Nearby</div>
+                    <div class="rating">⭐ 4.8 (12 reviews)</div>
+
+                    <div class="bottom">
+                        <span class="price">Free</span>
+                        <a href="#" class="details">View Details →</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="item-card">
+                <div class="item-image">🧮</div>
+
+                <div class="item-info">
+                    <div class="category">Study</div>
+                    <h3>Scientific Calculator</h3>
+                    <div class="location">📍 Nearby</div>
+                    <div class="rating">⭐ 4.6 (8 reviews)</div>
+
+                    <div class="bottom">
+                        <span class="price">Free</span>
+                        <a href="#" class="details">View Details →</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="item-card">
+                <div class="item-image">🧳</div>
+
+                <div class="item-info">
+                    <div class="category">Travel</div>
+                    <h3>Travel Suitcase</h3>
+                    <div class="location">📍 Nearby</div>
+                    <div class="rating">⭐ 4.9 (15 reviews)</div>
+
+                    <div class="bottom">
+                        <span class="price">₹100/day</span>
+                        <a href="#" class="details">View Details →</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="item-card">
+                <div class="item-image">📚</div>
+
+                <div class="item-info">
+                    <div class="category">Books</div>
+                    <h3>Java Programming Book</h3>
+                    <div class="location">📍 Nearby</div>
+                    <div class="rating">⭐ 4.7 (10 reviews)</div>
+
+                    <div class="bottom">
+                        <span class="price">Free</span>
+                        <a href="#" class="details">View Details →</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="item-card">
+                <div class="item-image">🔧</div>
+
+                <div class="item-info">
+                    <div class="category">Tools</div>
+                    <h3>Electric Drill</h3>
+                    <div class="location">📍 Nearby</div>
+                    <div class="rating">⭐ 4.5 (6 reviews)</div>
+
+                    <div class="bottom">
+                        <span class="price">₹50/day</span>
+                        <a href="#" class="details">View Details →</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="item-card">
+                <div class="item-image">⚽</div>
+
+                <div class="item-info">
+                    <div class="category">Sports</div>
+                    <h3>Football</h3>
+                    <div class="location">📍 Nearby</div>
+                    <div class="rating">⭐ 4.8 (9 reviews)</div>
+
+                    <div class="bottom">
+                        <span class="price">Free</span>
+                        <a href="#" class="details">View Details →</a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </section>
+
+</main>
+
+<footer>
+    <h2>BorrowBuddy</h2>
+    <p>Borrow what you need. Share what you don't.</p>
+    <p>© 2026 BorrowBuddy. All rights reserved.</p>
+</footer>
+
+</body>
+</html>
