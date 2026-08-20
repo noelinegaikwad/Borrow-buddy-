@@ -308,8 +308,12 @@
 
 <div class="search-area">
     <div class="search-box">
-        <input type="text" placeholder="Search for books, electronics, tools...">
-        <button>Search</button>
+        <input 
+            type="text" 
+            id="searchInput"
+            placeholder="Search for books, electronics, tools..."
+        >
+        <button onclick="searchItems()">Search</button>
     </div>
 </div>
 
@@ -483,6 +487,27 @@
     <p>Borrow what you need. Share what you don't.</p>
     <p>© 2026 BorrowBuddy. All rights reserved.</p>
 </footer>
+    
+<script>
+function searchItems() {
+    const searchText = document
+        .getElementById("searchInput")
+        .value
+        .toLowerCase()
+        .trim();
 
+    const cards = document.querySelectorAll(".item-card");
+
+    cards.forEach(card => {
+        const text = card.textContent.toLowerCase();
+
+        if (searchText === "" || text.includes(searchText)) {
+            card.style.display = "";
+        } else {
+            card.style.display = "none";
+        }
+    });
+}
+</script>
 </body>
 </html>
