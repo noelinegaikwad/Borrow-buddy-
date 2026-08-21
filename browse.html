@@ -149,6 +149,18 @@
             margin-right: 8px;
         }
 
+        .clear-filters {
+            margin-top: 18px;
+            display: inline-block;
+            font-size: 13px;
+            color: #2563eb;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            text-decoration: underline;
+        }
+
         .items-section {
             flex: 1;
         }
@@ -244,6 +256,13 @@
             font-weight: 600;
         }
 
+        .no-results {
+            text-align: center;
+            padding: 60px 20px;
+            color: #64748b;
+            display: none;
+        }
+
         footer {
             background: #172033;
             color: white;
@@ -308,12 +327,12 @@
 
 <div class="search-area">
     <div class="search-box">
-        <input 
-            type="text" 
+        <input
+            type="text"
             id="searchInput"
             placeholder="Search for books, electronics, tools..."
         >
-        <button onclick="searchItems()">Search</button>
+        <button onclick="applyFilters()">Search</button>
     </div>
 </div>
 
@@ -326,49 +345,51 @@
         <div class="filter-title">Category</div>
 
         <label>
-            <input type="checkbox"> Books
+            <input type="checkbox" class="category-filter" value="Books"> Books
         </label>
 
         <label>
-            <input type="checkbox"> Electronics
+            <input type="checkbox" class="category-filter" value="Electronics"> Electronics
         </label>
 
         <label>
-            <input type="checkbox"> Travel
+            <input type="checkbox" class="category-filter" value="Travel"> Travel
         </label>
 
         <label>
-            <input type="checkbox"> Tools
+            <input type="checkbox" class="category-filter" value="Tools"> Tools
         </label>
 
         <label>
-            <input type="checkbox"> Study
+            <input type="checkbox" class="category-filter" value="Study"> Study
         </label>
 
         <label>
-            <input type="checkbox"> Photography
+            <input type="checkbox" class="category-filter" value="Photography"> Photography
         </label>
 
         <label>
-            <input type="checkbox"> Sports
+            <input type="checkbox" class="category-filter" value="Sports"> Sports
         </label>
 
         <div class="filter-title">Availability</div>
 
         <label>
-            <input type="checkbox"> Available now
+            <input type="checkbox" id="availableNow"> Available now
         </label>
 
         <label>
-            <input type="checkbox"> Free items
+            <input type="checkbox" id="freeOnly"> Free items
         </label>
+
+        <button class="clear-filters" onclick="clearFilters()">Clear all filters</button>
 
     </aside>
 
     <section class="items-section">
 
         <div class="items-top">
-            <h2>Available Items</h2>
+            <h2 id="resultsHeading">Available Items</h2>
 
             <select class="sort">
                 <option>Sort: Recommended</option>
@@ -378,9 +399,9 @@
             </select>
         </div>
 
-        <div class="items">
+        <div class="items" id="itemsGrid">
 
-            <div class="item-card">
+            <div class="item-card" data-category="Photography" data-price="free" data-available="true">
                 <div class="item-image">📷</div>
 
                 <div class="item-info">
@@ -396,7 +417,7 @@
                 </div>
             </div>
 
-            <div class="item-card">
+            <div class="item-card" data-category="Study" data-price="free" data-available="true">
                 <div class="item-image">🧮</div>
 
                 <div class="item-info">
@@ -412,7 +433,7 @@
                 </div>
             </div>
 
-            <div class="item-card">
+            <div class="item-card" data-category="Travel" data-price="paid" data-available="true">
                 <div class="item-image">🧳</div>
 
                 <div class="item-info">
@@ -428,7 +449,7 @@
                 </div>
             </div>
 
-            <div class="item-card">
+            <div class="item-card" data-category="Books" data-price="free" data-available="true">
                 <div class="item-image">📚</div>
 
                 <div class="item-info">
@@ -444,7 +465,7 @@
                 </div>
             </div>
 
-            <div class="item-card">
+            <div class="item-card" data-category="Tools" data-price="paid" data-available="true">
                 <div class="item-image">🔧</div>
 
                 <div class="item-info">
@@ -460,7 +481,7 @@
                 </div>
             </div>
 
-            <div class="item-card">
+            <div class="item-card" data-category="Sports" data-price="free" data-available="true">
                 <div class="item-image">⚽</div>
 
                 <div class="item-info">
@@ -478,6 +499,11 @@
 
         </div>
 
+        <div class="no-results" id="noResults">
+            <h3>No items match your filters</h3>
+            <p>Try clearing some filters or searching for something else.</p>
+        </div>
+
     </section>
 
 </main>
@@ -487,27 +513,71 @@
     <p>Borrow what you need. Share what you don't.</p>
     <p>© 2026 BorrowBuddy. All rights reserved.</p>
 </footer>
-    
+
 <script>
-function searchItems() {
-    const searchText = document
-        .getElementById("searchInput")
-        .value
-        .toLowerCase()
-        .trim();
+    const searchInput = document.getElementById("searchInput");
+    const categoryCheckboxes = document.querySelectorAll(".category-filter");
+    const availableNowCheckbox = document.getElementById("availableNow");
+    const freeOnlyCheckbox = document.getElementById("freeOnly");
+    const itemCards = document.querySelectorAll(".item-card");
+    const noResults = document.getElementById("noResults");
+    const resultsHeading = document.getElementById("resultsHeading");
 
-    const cards = document.querySelectorAll(".item-card");
+    // Runs every time search text, a category box, or an availability box changes.
+    function applyFilters() {
+        const searchText = searchInput.value.toLowerCase().trim();
 
-    cards.forEach(card => {
-        const text = card.textContent.toLowerCase();
+        // Which categories are currently checked (empty array = no category filter applied)
+        const checkedCategories = Array.from(categoryCheckboxes)
+            .filter(cb => cb.checked)
+            .map(cb => cb.value);
 
-        if (searchText === "" || text.includes(searchText)) {
-            card.style.display = "";
-        } else {
-            card.style.display = "none";
-        }
-    });
-}
+        const freeOnly = freeOnlyCheckbox.checked;
+
+        // NOTE: "Available now" is wired up here, but every sample item is
+        // currently marked data-available="true" since there's no borrowing
+        // flow yet. Once "Request to Borrow" actually changes an item's status,
+        // this checkbox will start having a real effect.
+        const availableOnly = availableNowCheckbox.checked;
+
+        let visibleCount = 0;
+
+        itemCards.forEach(card => {
+            const cardCategory = card.dataset.category;
+            const cardPrice = card.dataset.price;
+            const cardAvailable = card.dataset.available === "true";
+            const cardText = card.textContent.toLowerCase();
+
+            const matchesSearch = searchText === "" || cardText.includes(searchText);
+            const matchesCategory = checkedCategories.length === 0 || checkedCategories.includes(cardCategory);
+            const matchesFree = !freeOnly || cardPrice === "free";
+            const matchesAvailable = !availableOnly || cardAvailable;
+
+            const isMatch = matchesSearch && matchesCategory && matchesFree && matchesAvailable;
+
+            card.style.display = isMatch ? "" : "none";
+            if (isMatch) visibleCount++;
+        });
+
+        noResults.style.display = visibleCount === 0 ? "block" : "none";
+        resultsHeading.textContent = visibleCount === itemCards.length
+            ? "Available Items"
+            : `Available Items (${visibleCount})`;
+    }
+
+    function clearFilters() {
+        searchInput.value = "";
+        categoryCheckboxes.forEach(cb => cb.checked = false);
+        availableNowCheckbox.checked = false;
+        freeOnlyCheckbox.checked = false;
+        applyFilters();
+    }
+
+    // Wire up listeners
+    searchInput.addEventListener("input", applyFilters);
+    categoryCheckboxes.forEach(cb => cb.addEventListener("change", applyFilters));
+    availableNowCheckbox.addEventListener("change", applyFilters);
+    freeOnlyCheckbox.addEventListener("change", applyFilters);
 </script>
 </body>
 </html>
